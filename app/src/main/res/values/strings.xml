@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Todo-list</string>
+    <string name="todo_list">Todo list</string>
+    <string name="email">Email</string>
+    <string name="name">Full name</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="app_to_manage_your_tasks">App to manage your tasks</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
 </resources>
