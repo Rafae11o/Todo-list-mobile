@@ -37,6 +37,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
+
         loginBtn = (Button) findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(this);
 
@@ -95,9 +97,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         passwordEditText.setEnabled(false);
         emailEditText.setEnabled(false);
 
+        System.out.println(email);
+        System.out.println(password);
+
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                // Redirect to list
+                startActivity(new Intent(this, TodoList.class));
             } else {
                 Toast.makeText(LoginActivity.this, "Failed to login ", Toast.LENGTH_LONG).show();
             }
