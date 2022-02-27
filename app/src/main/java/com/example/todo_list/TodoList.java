@@ -6,11 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -70,13 +74,14 @@ public class TodoList extends AppCompatActivity {
         userId = user.getUid();
 
         reference = FirebaseDatabase.getInstance().getReference().child("Tasks").child(userId);
+
     }
 
     private void addTask(){
         AlertDialog.Builder mDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        View view = inflater.inflate(R.layout.input_file, null);
+        View view = inflater.inflate(R.layout.create_task, null);
         mDialog.setView(view);
 
         AlertDialog dialog = mDialog.create();
@@ -152,7 +157,7 @@ public class TodoList extends AppCompatActivity {
             @NonNull
             @Override
             public MViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_details, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_list_item, parent, false);
                 return new MViewHolder(view);
             }
         };
@@ -262,5 +267,23 @@ public class TodoList extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                mAuth.signOut();
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
