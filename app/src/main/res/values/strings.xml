@@ -13,4 +13,6 @@
     <string name="description">Description</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="update">update</string>
+    <string name="delete">delete</string>
 </resources>

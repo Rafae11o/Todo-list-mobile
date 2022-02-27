@@ -3,7 +3,6 @@ package com.example.todo_list;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +42,10 @@ public class TodoList extends AppCompatActivity {
     private DatabaseReference reference;
 
     private ProgressDialog loader;
+
+    private String key = "";
+    private String taskTitleForUpdate;
+    private String taskDescriptionForUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +139,14 @@ public class TodoList extends AppCompatActivity {
                 holder.setDate(model.getDate());
                 holder.setTitle(model.getTitle());
                 holder.setDescription(model.getDescription());
+
+                holder.getView().setOnClickListener(view -> {
+                    key = getRef(position).getKey();
+                    taskTitleForUpdate = model.getTitle();
+                    taskDescriptionForUpdate = model.getDescription();
+
+                    updateTask();
+                });
             }
 
             @NonNull
@@ -182,5 +193,74 @@ public class TodoList extends AppCompatActivity {
             dateTextView.setText(date);
         }
     }
+
+    private void updateTask() {
+
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.update_task, null);
+        mDialog.setView(view);
+
+        AlertDialog dialog = mDialog.create();
+
+        EditText titleEditText = (EditText) view.findViewById(R.id.task_title_to_update);
+        EditText descriptionEditText = (EditText) view.findViewById(R.id.task_description_to_update);
+
+        titleEditText.setText(taskTitleForUpdate);
+        titleEditText.setSelection(taskTitleForUpdate.length());
+
+        descriptionEditText.setText(taskDescriptionForUpdate);
+        descriptionEditText.setSelection(taskDescriptionForUpdate.length());
+
+        Button deleteButton = view.findViewById(R.id.delete_task_btn);
+        Button updateButton = view.findViewById(R.id.update_task_btn);
+
+        updateButton.setOnClickListener(view1 -> {
+            taskTitleForUpdate = titleEditText.getText().toString().trim();
+            taskDescriptionForUpdate = descriptionEditText.getText().toString().trim();
+
+            String date = DateFormat.getDateInstance().format(new Date());
+
+            Task task = new Task(key, taskTitleForUpdate, taskDescriptionForUpdate, date);
+
+            reference.child(key).setValue(task).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(TodoList.this, "Task has been updated successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e(this.getClass().toString(), Objects.requireNonNull(task.getException()).toString());
+                        Toast.makeText(TodoList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            dialog.dismiss();
+
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reference.child(key).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(TodoList.this, "Task has been deleted successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(this.getClass().toString(), Objects.requireNonNull(task.getException()).toString());
+                            Toast.makeText(TodoList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
 
 }

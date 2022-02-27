@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/task_title"
+        android:id="@+id/task_title_to_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/title"
         android:inputType="textShortMessage"/>
 
     <EditText
-        android:id="@+id/task_description"
+        android:id="@+id/task_description_to_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/description"
@@ -25,21 +25,28 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/save_task"
+            android:id="@+id/update_task_btn"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:text="@string/save"
+            android:text="@string/update"
             android:layout_marginEnd="24dp"/>
 
         <Button
-            android:id="@+id/cancel_creating_task"
+            android:id="@+id/delete_task_btn"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:layout_marginEnd="24dp"/>
+
+        <Button
+            android:id="@+id/cancel_updating_task"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:text="@string/cancel"/>
 
     </LinearLayout>
-
 
 </LinearLayout>
